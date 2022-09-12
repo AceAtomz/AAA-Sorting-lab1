@@ -2,9 +2,15 @@
 #include <cstring>
 #include <vector>
 #include <random>
+#include <chrono>
+#include <fstream>
+#include <string>
 using namespace std;
 
-int size = 5;
+int size = 1000;
+int maxsize = 20000;
+vector<int> times;
+int runs = 5;
 
 vector<int> generateNums(int N){
     vector<int> arr;
@@ -90,24 +96,47 @@ vector<int> BubbleEscapeSort(vector<int> arr, int n)
    return arr;
 }
 
-int main(){
-    vector<int> OGnums = generateNums(size);
-    vector<int> SSnums = SelectionSort(OGnums, size);
-    vector<int> BSnums = BubbleSort(OGnums, size);
-    vector<int> BESnums = BubbleEscapeSort(OGnums, size);
+void printSorts(vector<int> times){
+    ofstream fw("C:\\Users\\User\\Documents\\GitHub\\AAA-Sorting-lab1\\data.txt", ofstream::out);
 
-    string OGprinted =  "OG: ";
-    string SSprinted = "SS: ";
-    string BSprinted = "BS: ";
-    string BESprinted = "BE: ";
-    for(int i=0; i<size;i++){
-        OGprinted += to_string(OGnums[i]) + " ";
-        SSprinted += to_string(SSnums[i]) + " ";
-        BSprinted += to_string(BSnums[i]) + " ";
-        BESprinted += to_string(BESnums[i]) + " ";
+    //check if file was successfully opened for writing
+    if (fw.is_open())
+    {
+      //store array contents to text file
+      for (int i = 0; i < 20; i++) {
+        fw << times[i];
+        if(i!=19) fw << ",";
+        //else fw << "\n";
+      }
+      fw.close();
+    }
+    else cout << "Problem with opening file";
+
+    fw.close();
+}
+
+int main(){
+    for(int n=size;n<maxsize;n+=size){
+        int total_time = 0;
+        for(int i=0;i<runs;i++){
+            vector<int> OGnums = generateNums(size);
+
+            auto start = chrono::high_resolution_clock::now();
+            vector<int> SSnums = SelectionSort(OGnums, size);
+
+            auto finish = chrono::high_resolution_clock::now();
+            int time_elapsed = chrono::duration_cast<chrono::nanoseconds>(finish-start).count();
+            total_time += time_elapsed;
+        }
+        int average_time = total_time / runs;
+        times.push_back(average_time);
+        //cout << average_time << endl;
     }
 
-    cout << OGprinted << endl << SSprinted << endl << BSprinted << endl << BESprinted << endl;
+    printSorts(times);
+
+    //vector<int> BSnums = BubbleSort(OGnums, size);
+    //vector<int> BESnums = BubbleEscapeSort(OGnums, size);
 
     return 0;
 }
