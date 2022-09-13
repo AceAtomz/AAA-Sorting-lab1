@@ -1,0 +1,2 @@
+(a) Selection Sort
+(b) Selection Sort performs an overall less number of swaps than Bubble Sort, even though both are in O(N^2)
