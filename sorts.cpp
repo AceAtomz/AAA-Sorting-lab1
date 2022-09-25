@@ -115,116 +115,71 @@ vector<int> InsertionSort(vector<int> arr, int n){
     return arr;
 }
 
-void merge(int array[], int const left, int const mid, int const right){
-    auto const subArrayOne = mid - left + 1;
-    auto const subArrayTwo = right - mid;
+vector<int> MergeSort(vector<int> arr, vector<int> temp, int left, int right){
+	if(right - left > 0){
+		int mid = floor((left + right)/2);
+		arr = MergeSort(arr, temp, left, mid);
+		arr = MergeSort(arr, temp, mid+1, right);
 
-    // Create temp arrays
-    auto *leftArray = new int[subArrayOne],
-         *rightArray = new int[subArrayTwo];
+		for(int i = mid; i >= left; i--){
+			temp[i] = arr[i];
+		}
+		for(int j = mid+1; j <= right; j++){
+			temp[right+mid+1-j] = arr[j];
+		}
 
-    // Copy data to temp arrays leftArray[] and rightArray[]
-    for (auto i = 0; i < subArrayOne; i++)
-        leftArray[i] = array[left + i];
-    for (auto j = 0; j < subArrayTwo; j++)
-        rightArray[j] = array[mid + 1 + j];
-
-    auto indexOfSubArrayOne = 0, // Initial index of first sub-array
-         indexOfSubArrayTwo = 0; // Initial index of second sub-array
-    int indexOfMergedArray = left; // Initial index of merged array
-
-    // Merge the temp arrays back into array[left..right]
-    while (indexOfSubArrayOne < subArrayOne && indexOfSubArrayTwo < subArrayTwo) {
-        if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) {
-            array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
-            indexOfSubArrayOne++;
-        }else {
-            array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
-            indexOfSubArrayTwo++;
-        }
-        indexOfMergedArray++;
-    }
-    // Copy the remaining elements of
-    // left[], if there are any
-    while (indexOfSubArrayOne < subArrayOne) {
-        array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
-        indexOfSubArrayOne++;
-        indexOfMergedArray++;
-    }
-    // Copy the remaining elements of
-    // right[], if there are any
-    while (indexOfSubArrayTwo < subArrayTwo) {
-        array[indexOfMergedArray]= rightArray[indexOfSubArrayTwo];
-        indexOfSubArrayTwo++;
-        indexOfMergedArray++;
-    }
-    delete[] leftArray;
-    delete[] rightArray;
+		int i = left;
+		int j = right;
+        for(int k = left; k <= right; k++){
+			if(temp[i] < temp[j]){
+				arr[k] = temp[i];
+				i++;
+			}else{
+				arr[k] = temp[j];
+				j--;
+			}
+		}
+	}
+	return arr;
 }
 
-// vector<int> MergeSort(vector<int> arr, int const left, int const right){
-//     if (left >= right)
-//         return; // Returns recursively
-
-//     auto mid = left + (right - left) / 2;
-//     mergeSort(arr, left, mid);
-//     mergeSort(arr, mid + 1, right);
-//     merge(arr, left, mid, right);
-
-//     return arr;
-// }
-
-/* This function takes last element as pivot, places
-the pivot element at its correct position in sorted
-array, and places all smaller (smaller than pivot)
-to left of pivot and all greater elements to right
-of pivot */
-int partition(int arr[], int low, int high)
-{
-    int pivot = arr[high]; // pivot
-    int i
-        = (low
-           - 1); // Index of smaller element and indicates
-                 // the right position of pivot found so far
-
-    for (int j = low; j <= high - 1; j++) {
-        // If current element is smaller than the pivot
-        if (arr[j] < pivot) {
-            i++; // increment index of smaller element
-            swap(&arr[i], &arr[j]);
+vector<int> QuickSort(vector<int> arr, int left, int right){
+    if(right > left){
+        int v = arr[right];
+        int i = left;
+        int j = right;
+        while(i < j){
+            while(arr[i]<v){
+                i++;
+            }
+            while(j > i && arr[j]>=v){
+                j--;
+            }
+            if(j > i){
+                int t = arr[i];
+                arr[i] = arr[j];
+                arr[j] = t;
+            }
+            else{
+                int t = arr[i];
+                arr[i] = arr[right];
+                arr[right] = t;
+            }
         }
+        arr = QuickSort(arr, left, i-1);
+        arr = QuickSort(arr,i+1,right);
     }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
+    return arr;
 }
 
-/* The main function that implements QuickSort
-arr[] --> Array to be sorted,
-low --> Starting index,
-high --> Ending index */
-// vector<int> QuickSort(vector<int> arr, int low, int high){
-//     if (low < high) {
-//         /* pi is partitioning index, arr[p] is now
-//         at right place */
-//         int pi = partition(arr, low, high);
-
-//         // Separately sort elements before
-//         // partition and after partition
-//         quickSort(arr, low, pi - 1);
-//         quickSort(arr, pi + 1, high);
-//     }
-
-//     return arr;
-// }
-
-void printSorts(string SS, string BB, string BBE, string IS){
+void printSorts(string SS, string BB, string BBE, string IS, string MS, string QS){
     ofstream fw("C:\\Users\\User\\Documents\\GitHub\\AAA-Sorting-lab1\\data.txt", ofstream::out);
 
     //check if file was successfully opened for writing
     if (fw.is_open())
     {
       //store array contents to text file
-      fw << SS << "\n" << BB << "\n" << BBE << "\n" << IS;
+      fw << SS << "\n" << BB << "\n" << BBE << "\n" << IS << "\n" << MS << "\n" << QS;
 
       fw.close();
     }
@@ -239,6 +194,7 @@ int main(){
     string BBE = "";
     string IS = "";
     string MS = "";
+    string QS = "";
 
     for(int n=size;n<=maxsize;n+=size){
         vector<int> vec1 = generateNums(n);
@@ -248,6 +204,7 @@ int main(){
         vector<int> vec5 = generateNums(n);
 
         vector<vector<int>> vectors{vec1, vec2, vec3, vec4, vec5};
+        vector<int> temp(n);
 
         //SS
         long long total_time = 0;
@@ -305,21 +262,35 @@ int main(){
         if(n!=maxsize) IS += ",";
 
         //MS
-        // total_time = 0;
-        // for(int i=0;i<runs;i++){
-        //     auto start = chrono::high_resolution_clock::now();
-        //     vector<int> MSnums = MergeSort(vectors[i], 0, n-1);
+        total_time = 0;
+        for(int i=0;i<runs;i++){
+            auto start = chrono::high_resolution_clock::now();
+            vector<int> MSnums = MergeSort(vectors[i], temp, 0, n-1);
 
-        //     auto finish = chrono::high_resolution_clock::now();
-        //     int time_elapsed = chrono::duration_cast<chrono::nanoseconds>(finish-start).count();
-        //     total_time += time_elapsed;
-        // }
-        // average_time = total_time / runs;
-        // MS += to_string(average_time);
-        // if(n!=maxsize) MS += ",";
+            auto finish = chrono::high_resolution_clock::now();
+            int time_elapsed = chrono::duration_cast<chrono::nanoseconds>(finish-start).count();
+            total_time += time_elapsed;
+        }
+        average_time = total_time / runs;
+        MS += to_string(average_time);
+        if(n!=maxsize) MS += ",";
+
+        //QS
+        total_time = 0;
+        for(int i=0;i<runs;i++){
+            auto start = chrono::high_resolution_clock::now();
+            vector<int> QSnums = QuickSort(vectors[i], 0, n-1);
+
+            auto finish = chrono::high_resolution_clock::now();
+            int time_elapsed = chrono::duration_cast<chrono::nanoseconds>(finish-start).count();
+            total_time += time_elapsed;
+        }
+        average_time = total_time / runs;
+        QS += to_string(average_time);
+        if(n!=maxsize) QS += ",";
     }
 
-    printSorts(SS, BB, BBE, IS);
+    printSorts(SS, BB, BBE, IS, MS, QS);
 
     return 0;
 }
