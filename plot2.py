@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    filepath = './data.txt'
+    filepath = './data2.txt'
     names = ["Selection Sort", "Bubble Sort" , "Bubble Escape", "Insertion Sort", "MergeSort", "QuickSort"]  
     x = list(range(1000, 20001, 1000))  # this is the range of input sizes tested
     with open(filepath, 'r') as file:
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     plt.ylabel('Time taken (ns)')
     plt.title('Comparison of sort procedures')
     plt.legend()
-    plt.savefig('sorting.pdf')
+    plt.savefig('sorting2.pdf')
     plt.show()
 
 
