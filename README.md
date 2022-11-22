@@ -12,7 +12,7 @@ Sorting Algorithms tested include:
 # How to use
 To download the repo you must first clone it with the command
 ```
-git clone https://github.com/TheScrumbags/the_scrumbags.git
+git clone https://github.com/AceAtomz/Popular-Sorting-Algorithms-compared.git
 ```
 
 To generate new results run
