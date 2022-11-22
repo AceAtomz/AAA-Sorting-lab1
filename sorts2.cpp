@@ -173,7 +173,7 @@ vector<int> QuickSort(vector<int> arr, int left, int right){
 }
 
 void printSorts(string SS, string BB, string BBE, string IS, string MS, string QS){
-    ofstream fw("C:\\Users\\User\\Documents\\GitHub\\AAA-Sorting-lab1\\data.txt", ofstream::out);
+    ofstream fw("C:\\Users\\User\\Documents\\GitHub\\Popular-Sorting-Algorithms-compared\\data2.txt", ofstream::out);
 
     //check if file was successfully opened for writing
     if (fw.is_open())
