@@ -9,5 +9,21 @@ Sorting Algorithms tested include:
 - MergeSort
 - QuickSort
 
-#Comparisons
-![Sorting Comparisons](/sorting2.png)
+# How to use
+To download the repo you must first clone it with the command
+```
+git clone https://github.com/TheScrumbags/the_scrumbags.git
+```
+
+To generate new results run
+```
+sorts2.exe
+```
+
+To generate new comparison plot of results run
+```
+plot2.py
+```
+
+# Comparisons
+![sorting2](https://user-images.githubusercontent.com/93909209/203313854-30bcfa89-4376-4a00-9dc0-09ec4fbae404.png)
