@@ -14,7 +14,6 @@ if __name__ == '__main__':
     plt.ylabel('Time taken (ns)')
     plt.title('Comparison of sort procedures')
     plt.legend()
+    plt.savefig('sorting2.png')
     plt.savefig('sorting2.pdf')
     plt.show()
-
-
